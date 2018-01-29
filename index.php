@@ -68,6 +68,14 @@ catch (PDOException $e)
 			<?php
 				if (!$succ_login)
 					echo 'Zaloguj się aby widzieć posty!</br>';
+				else
+				{
+					echo '<center><div style="max-height: 510px; overflow-y: auto;">';
+					$select = $db->query('SELECT userID, tytul, tresc, data FROM artykuly ORDER BY data DESC;');
+					foreach($select as $row)
+						echo '<table> <tr> <td style="border: 1px solid black; width: 400px; height: 60px; text-align: center;"> <b>'.$row['tytul'].'</b></br></br>'.$row['tresc'].'</br></br><hr><span style="float: left;">Autor: '.$row['userID'].'</span> <span style="float: right;">'.$row['data'].'</span> </td> </tr> </table></br>';
+					echo '</div></center>';
+				}
 			?>
 		</div>
 		<div id="stopka">
