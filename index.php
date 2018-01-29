@@ -71,9 +71,9 @@ catch (PDOException $e)
 				else
 				{
 					echo '<center><div style="max-height: 510px; overflow-y: auto;">';
-					$select = $db->query('SELECT userID, tytul, tresc, data FROM artykuly ORDER BY data DESC;');
+					$select = $db->query('SELECT id, userID, tytul, tresc, data FROM artykuly ORDER BY data DESC;');
 					foreach($select as $row)
-						echo '<table> <tr> <td style="border: 1px solid black; width: 400px; height: 60px; text-align: center;"> <b>'.$row['tytul'].'</b></br></br>'.$row['tresc'].'</br></br><hr><span style="float: left;">Autor: '.$row['userID'].'</span> <span style="float: right;">'.$row['data'].'</span> </td> </tr> </table></br>';
+						echo '<table> <tr> <td style="border: 1px solid black; min-width: 400px; max-width: 400px; height: 60px; text-align: center;"> <b>'.$row['tytul'].'</b></br></br><span style="word-wrap: break-word;">'.$row['tresc'].'</span></br></br><a href="pokazArtykul.php?id='.$row['id'].'"><span style="float:right; padding-top: 5px">Pokaż artykuł</span></a></br><hr><span style="float: left;">Autor: '.$row['userID'].'</span> <span style="float: right;">'.$row['data'].'</span> </td> </tr> </table></br>';
 					echo '</div></center>';
 				}
 			?>
