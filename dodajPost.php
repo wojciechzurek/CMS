@@ -10,6 +10,17 @@ catch (PDOException $e)
     print "Błąd połączenia z bazą!: " . $e->getMessage() . "<br/>";
 	die();
 }
+
+$dodano = false;
+if (isset($_POST['tytul']) && isset($_POST['tresc']))
+{
+	$insert = $db->prepare("INSERT INTO artykuly(userID, tytul, tresc, data) VALUES(:userID, :tytul, :tresc, NOW());");
+	$insert->bindParam(":userID", $_SESSION['login_id']);
+	$insert->bindParam(":tytul", $_POST['tytul']);
+	$insert->bindParam(":tresc", $_POST['tresc']);
+	if ($insert->execute())
+		$dodano = true;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,15 +37,17 @@ catch (PDOException $e)
 		<div id="panelUzytkownika">
 			<?php
 				$succ_login = false;
+				$is_admin = false;
 				if (isset($_SESSION['zalogowany']) && $_SESSION['zalogowany'])
 				{
-					$check = $db->prepare("SELECT login FROM uzytkownicy WHERE id = :id LIMIT 1;");
+					$check = $db->prepare("SELECT login, is_admin FROM uzytkownicy WHERE id = :id LIMIT 1;");
 					$check->bindParam(":id", $_SESSION['login_id']);
 					$check->execute();
 					if ($check->rowCount() > 0)
 					{
 						$check = $check->fetch(PDO::FETCH_ASSOC);
 						$login = $check['login'];
+						$is_admin = $check['is_admin'];
 							
 						echo '<p>Zalogowany jako: '.$login.' <a href="wyloguj.php">(Wyloguj)</a></p>';
 						echo '<hr>';
@@ -46,6 +59,8 @@ catch (PDOException $e)
 							echo '<a href="dodajPost.php"><button>Dodaj artykuł</button></a></br>';
 							echo '<a href="edytujPost.php"><button>Edytuj artykuły</button></a></br></br></br>';
 						}
+						else
+							$is_admin = false;
 
 						echo 'Menu użytkownika:</br>';
 						echo '<a href="index.php"><button>Pokaż artykuły</button></a></br>';
@@ -66,8 +81,21 @@ catch (PDOException $e)
 		</div>
 		<div id="trescMain">
 			<?php
-				if (!$succ_login)
-					echo 'Zaloguj się aby widzieć posty!</br>';
+				if (!$is_admin)
+				{
+					echo 'Musisz być administratorem aby dodać artykuł!';
+				}
+				else if ($succ_login)
+				{
+					echo '<h3>Dodawanie artykułu</h3></br>';
+					echo "<form action='dodajPost.php' method='POST'>";
+					echo "Tytuł:</br><input type='text' name='tytul' required></input></br></br>";
+					echo "Treść:</br><textarea name='tresc' cols='40' rows='10' required></textarea></br>";
+					echo "<input type='submit'></input>";
+					echo '</form>';
+				}
+				else
+					echo 'Zaloguj się aby dodać artykuł';
 			?>
 		</div>
 		<div id="stopka">
@@ -75,34 +103,7 @@ catch (PDOException $e)
 		</div>
 	</body>
 	<?php
-		if (isset($_SESSION['login_err']))
-		{
-			$tekst = "";
-			$good = false;
-			if ($_SESSION['login_err'] == 'no data')
-				$tekst = 'Brak hasła lub loginu!';
-			else if ($_SESSION['login_err'] == 'no connect')
-				$tekst = 'Brak połączenia z bazą!';
-			else if ($_SESSION['login_err'] == 'Wrong pass')
-				$tekst = 'Złe hasło!';
-			else if ($_SESSION['login_err'] == 'No login')
-				$tekst = 'Nie znaleziono takiego konta!';
-			else if ($_SESSION['login_err'] == 'Nie admin')
-				$tekst = 'Nie jesteś administratorem!';
-			else if ($_SESSION['login_err'] == 'Wylogowano')
-			{
-				$good = true;
-				$tekst = 'Zostałeś pomyślnie wylogowany!';
-			}
-			else if ($_SESSION['login_err'] == 'okej')
-			{
-				$good = true;
-				$tekst = 'Zalogowano pomyślnie!';
-			}
-			
-			echo '<script> swal({title: "'.($good?'Pomyślnie!':'Nie pomyślnie!').'", text: "'.$tekst.'", icon: "'.($good?'success':'error').'"}); </script>';
-		
-			unset($_SESSION['login_err']);
-		}
+		if ($dodano)
+			echo '<script> swal({title: "Pomyślnie!", text: "Pomyślnie dodano artykuł!", icon: "success"}); </script>';
 	?>
 </html>

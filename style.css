@@ -20,13 +20,13 @@ body
 	margin-left: 4px;
 	margin-right: 20px;
 }
-#wypozyczalniaMain
+#trescMain
 {
 	float: right;
 	background-color: lightblue;
 	width: 70%;
-	min-height: 580px;
-	max-height: 580px;
+	min-height: 520px;
+	max-height: 520px;
 	margin-left: 10px;
 	padding: 10px;
 	text-align: center;
@@ -70,7 +70,7 @@ body
   text-decoration: none;
 }
 
-input[type="text"] ,input[type="password"]
+input[type="text"], input[type="password"]
 {
 	background-color: #66ccff; 
 }
