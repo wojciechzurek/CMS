@@ -57,7 +57,8 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 						{
 							echo 'Menu Administratora:</br>';
 							echo '<a href="dodajPost.php"><button>Dodaj artykuł</button></a></br>';
-							echo '<a href="edytujArtykul.php?id='.$_GET['id'].'"><button>Edytuj ten artykuł</button></a></br></br></br>';
+							echo '<a href="edytujArtykul.php?id='.$_GET['id'].'"><button>Edytuj ten artykuł</button></a></br>';
+							echo '<a href="usunArtykul.php?id='.$_GET['id'].'"><button>Usuwanie Artykułów</button></a></br></br></br>';
 						}
 
 						echo 'Menu użytkownika:</br>';
