@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 29 Sty 2018, 12:48
+-- Czas generowania: 05 Lut 2018, 11:57
 -- Wersja serwera: 10.1.26-MariaDB
 -- Wersja PHP: 7.1.8
 
@@ -787,7 +787,7 @@ INSERT INTO `artykuly` (`id`, `userID`, `tytul`, `tresc`, `data`) VALUES
 (743, 74816, 'ABt', 'ipSskYdE8lpupz71YmEnQUc6wqMBDvCP5YVTwoX6PR0catLenyPNFjXkIIjGKVZTMaJQmOruo512s18lr8AbBvfi3qvSutFS6Cr4GFRtURgHKjXJZ0feEBIxebUNsHZDC', '2018-01-29 11:48:28'),
 (744, 16041, 'dcJ', 'q4Vl86cwwh8ELBguMX5jK4ZraI2DtMLeTptynCyRxbJ2iv9eA3NDYdEUVNdmImfnQCfPP', '2018-01-29 11:48:28'),
 (745, 35797, 'AVq', '82saEqjOlKmvSDebAHVBXuohdJRIM7QUfz', '2018-01-29 11:48:28'),
-(746, 11607, 'bvw', '6SM2np95arZgCLTowVdhQltAN0Bmcs7fU3HqY8x1JjDPvbW4IRzFiOk', '2018-01-29 11:48:29'),
+(746, 11607, 'bvw', 'LekaÅ„scy amerykarze potwierdzili gÅ‚upotÄ™ pewnego osobnika imieniem na M. i nazwiskiem na nie powiem, bo nie mogÄ™. Osobnik ten wykazuje szczzegÃ³lnÄ… gÅ‚upotÄ™ w sytuacjach kryzysowych. Jest on zagroÅ¼eniem dla innych osobnikÃ³w w stadzie.', '2018-01-29 11:48:29'),
 (747, 3294, 'MOa', 'ASL2hDd6trKkweWRlp9ZOiIxonNFbs70auX1Qvyg3mPj4qYzUcJfHE8G5B', '2018-01-29 11:48:29'),
 (748, 52427, 'c6N', 'Xp5NzVAa1V6BbDsFtjYDfOA0189qZagvxo5NGgQqfUPHTBQ8GuJWnIi2MPdR37zJphweEmoCWHF0yLvRkr4L', '2018-01-29 11:48:29');
 
@@ -802,6 +802,7 @@ CREATE TABLE `komentarze` (
   `idArtykulu` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
   `tresc` text NOT NULL,
+  `lajki` int(11) NOT NULL DEFAULT '0',
   `data` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -809,10 +810,33 @@ CREATE TABLE `komentarze` (
 -- Zrzut danych tabeli `komentarze`
 --
 
-INSERT INTO `komentarze` (`id`, `idArtykulu`, `userID`, `tresc`, `data`) VALUES
-(1, 746, 1, 'Siemano Tomek!', '2018-01-29 12:47:07'),
-(2, 746, 1, 'No witam witam szefa', '2018-01-29 12:47:18'),
-(3, 746, 1, 'Co tam u ciebie?', '2018-01-29 12:47:25');
+INSERT INTO `komentarze` (`id`, `idArtykulu`, `userID`, `tresc`, `lajki`, `data`) VALUES
+(1, 746, 1, 'Siemano Tomek!', 0, '2018-01-29 12:47:07'),
+(2, 746, 1, 'No witam witam szefa', 0, '2018-01-29 12:47:18'),
+(3, 746, 1, 'Co tam u ciebie?', 1, '2018-01-29 12:47:25'),
+(4, 746, 1, 'Witam Marcina', 2, '2018-01-29 13:08:09');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `polubienia`
+--
+
+CREATE TABLE `polubienia` (
+  `id` int(11) NOT NULL,
+  `idArtykulu` int(11) NOT NULL DEFAULT '0',
+  `idKomentarza` int(11) NOT NULL DEFAULT '0',
+  `idUzytkownika` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `polubienia`
+--
+
+INSERT INTO `polubienia` (`id`, `idArtykulu`, `idKomentarza`, `idUzytkownika`) VALUES
+(5, 746, 3, 1),
+(7, 746, 4, 2),
+(9, 746, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -852,6 +876,12 @@ ALTER TABLE `komentarze`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `polubienia`
+--
+ALTER TABLE `polubienia`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
@@ -871,7 +901,13 @@ ALTER TABLE `artykuly`
 -- AUTO_INCREMENT dla tabeli `komentarze`
 --
 ALTER TABLE `komentarze`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT dla tabeli `polubienia`
+--
+ALTER TABLE `polubienia`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT dla tabeli `uzytkownicy`

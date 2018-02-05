@@ -56,8 +56,7 @@ if (isset($_POST['tytul']) && isset($_POST['tresc']))
 						if ($_SESSION['is_admin'])
 						{
 							echo 'Menu Administratora:</br>';
-							echo '<a href="dodajPost.php"><button>Dodaj artykuł</button></a></br>';
-							echo '<a href="edytujPost.php"><button>Edytuj artykuły</button></a></br></br></br>';
+							echo '<a href="dodajPost.php"><button>Dodaj artykuł</button></a></br></br></br>';
 						}
 						else
 							$is_admin = false;
@@ -80,6 +79,7 @@ if (isset($_POST['tytul']) && isset($_POST['tresc']))
 			?>
 		</div>
 		<div id="trescMain">
+			<a href="index.php"><button style="float: left"><<</button></a>
 			<?php
 				if (!$is_admin)
 				{
