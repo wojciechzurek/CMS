@@ -30,6 +30,7 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 		<meta charset="UTF-8"></meta>
 		<title>CMS</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="popup.css">
 		<script src="js/sweetalert.min.js"></script>
 	</head>
 	<body>
@@ -124,7 +125,7 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 			?>
 		</div>
 		<div id="trescMain">
-			<a href="index.php"><button style="float: left"><<</button></a></br>
+			<a href="index.php"><button style="float: left; top: 0; position: sticky;"><<</button></a></br>
 			<center><div style="max-width: 600px">
 				<?php
 					if (!$succ_login)
@@ -166,6 +167,29 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 								foreach($select as $row)
 								{
 									$lubieTo = in_array($row['id'], $mojePolubienia);
+									echo '<div>
+											<img class="containerImg" src="profile1.png" alt="Profil" style="width:100%"></img>
+
+											<div class="container">
+												<div>'.$row['tresc'].'</div>
+												<div class="containerLike">
+													<form action="pokazArtykul.php?id='.$_GET['id'].'" method="POST">
+														<input name="akczja" type="text" value="lubieTo" hidden></input>
+														<input name="idKomentarza" type="text" value="'.$row['id'].'" hidden></input>
+														<b><span style="float: left; margin-left: 4px; margin-top: '.($lubieTo?0:10).'px; margin-right: 4px; color: DarkSlateBlue">'.$row['lajki'].'</span></b>
+														<input type="image" src="'.($lubieTo?'unlike.png':'like.png').'" style="margin-bottom: -2px; cursor: pointer" alt="Lubie to"></input>
+													</form>
+												</div>
+												<div class="containerDate">
+													'.$row['data'].'
+												</div>
+											</div>
+										</div>';
+								}
+	
+								/*foreach($select as $row)
+								{
+									$lubieTo = in_array($row['id'], $mojePolubienia);
 									echo '<table>
 											<tr>
 												<td style="border: 1px solid black; min-width: 400px; max-width: 400px; height: 60px; text-align: center;">
@@ -186,7 +210,7 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 											</tr>
 										</table>
 										</br>';
-								}
+								}*/
 							}
 							else
 								echo 'Brak komentarzy!';
@@ -197,22 +221,41 @@ if (isset($_POST['tresc']) && $_POST['tresc'] != "")
 					}
 				?>
 			</div>
-			<form action="pokazArtykul.php?id=<?php echo $_GET['id']; ?>" method="POST">
-				Twój komentarz: <input type="text" name="tresc" size="70" maxlength="150"></input>
-				<input type="submit" value="Dodaj"></input>
-			</form>
+			<div style="background-color: lightblue; bottom: 0; position: sticky;">
+				<form action="pokazArtykul.php?id=<?php echo $_GET['id']; ?>" method="POST">
+					Twój komentarz: <input type="text" name="tresc" size="70" maxlength="150"></input>
+					<input type="submit" value="Dodaj"></input>
+				</form>
+			</div>
 			</center>
 		</div>
 		<div id="stopka">
 			&copy; Wojciech Żurek i Tomasz Rzeźniczak 22.01.2018
 		</div>
+		<div id="snackbar"></div>
 	</body>
 	<?php
 		if ($dodano)
-			echo '<script> swal({title: "Pomyślnie!", text: "Pomyślnie dodano komentarz!", icon: "success"}); </script>';
+		{
+			//echo '<script> swal({title: "Pomyślnie!", text: "Pomyślnie dodano komentarz!", icon: "success"}); </script>';
+			echo '<script> var x = document.getElementById("snackbar");
+					x.className = "show";
+					x.innerHTML = "Pomyślnie dodano komentarz!";
+					setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);</script>';
+		}
 		if ($polubiono)
-			echo '<script> swal({title: "Pomyślnie!", text: "Pomyślnie polubiono komentarz!", icon: "success"}); </script>';
+		{
+			echo '<script> var x = document.getElementById("snackbar");
+					x.className = "show";
+					x.innerHTML = "Pomyślnie polubiono komentarz! <img src=\'like.png\'></img>";
+					setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);</script>';
+		}
 		if ($odlubiono)
-			echo '<script> swal({title: "Pomyślnie!", text: "Pomyślnie odlubiono komentarz!", icon: "success"}); </script>';
+		{
+			echo '<script> var x = document.getElementById("snackbar");
+					x.className = "show";
+					x.innerHTML = "Pomyślnie odlubiono komentarz! <img src=\'unlike.png\'></img>";
+					setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);</script>';
+		}
 	?>
 </html>
